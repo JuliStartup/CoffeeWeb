@@ -1,0 +1,58 @@
+/* Container for the entire navbar */
+.nav_wrapper {
+    position: relative;
+  }
+  
+  /* Top banner (sits above the nav) */
+  .top_banner {
+    width: 100%;
+    height: 40px;
+    background: var(--purple);
+    /* You can add any content or styles here */
+  }
+  
+  /* Nav initial state */
+  .nav {
+    width: 100%;
+    height: 80px;
+    background: var(--primaryColor);
+    position: relative; /* initially, nav is in normal flow */
+    transition: background 0.3s, position 0.3s;
+  }
+  
+  /* When pinned, the nav becomes fixed at the top and its background changes to red */
+  .nav.pinned {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: red;
+    z-index: 1000;
+  }
+  
+  /* Inner container for layout */
+  .nav_inner {
+    max-width: 1500px;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  /* Basic styling for links, logo, and button */
+  .nav_links a,
+  .nav_actions a,
+  .nav_actions button {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 0 15px;
+  }
+  
+  /* (Optional) Hide the button initially by ensuring it is offscreen and transparent.
+     The GSAP animation will bring it in. */
+  .nav_actions button {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  
