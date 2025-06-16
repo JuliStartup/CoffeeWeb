@@ -42,7 +42,7 @@ const TopBannerW = () => {
 	};
 
 	return (
-		<div className="top_banner w-full bg-[--purple] py-1 hidden md:block">
+		<div className="top_banner w-full bg-[--beige] py-1 hidden md:block">
 			<div className="w-full px-2 mx-auto max-w-6xl">
 				<div className="flex flex-col md:flex-row items-center justify-between gap-2">
 					{/* Countdown Timer */}
@@ -96,7 +96,7 @@ const TopBannerW = () => {
 						/>
 						<button
 							type="submit"
-							className="text-[--purple] px-4 py-1 font-medium text-sm bg-gray-100"
+							className="text-[--beige] px-4 py-1 font-medium text-sm bg-gray-100"
 						>
 							Claim Now
 						</button>

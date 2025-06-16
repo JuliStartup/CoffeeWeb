@@ -78,7 +78,7 @@ export default function BusinessSection() {
 								Select Business for a
 								<span className="block">
 									top-tier
-									<span className="text-[--purple]">industry experience</span>
+									<span className="text-[--beige]">industry experience</span>
 								</span>
 							</h2>
 						</div>

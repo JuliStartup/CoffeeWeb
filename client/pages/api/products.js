@@ -1,22 +1,23 @@
 export default async function handler(req, res) {
+	const shop = process.env.SHOPIFY_STORE_DOMAIN;
+	const token = process.env.SHOPIFY_ADMIN_API_TOKEN;
+
 	const response = await fetch(
-		`https://${process.env.SHOPIFY_STORE_DOMAIN}/admin/api/2023-07/products.json`,
+		`https://${shop}/admin/api/2024-04/products.json`,
 		{
-			method: "GET",
 			headers: {
-				"X-Shopify-Access-Token": process.env.SHOPIFY_ADMIN_API_TOKEN,
+				"X-Shopify-Access-Token": token,
 				"Content-Type": "application/json",
 			},
 		},
 	);
 
-	const data = await response.json();
-
 	if (!response.ok) {
 		return res
-			.status(500)
-			.json({ error: data.errors || "Failed to fetch products" });
+			.status(response.status)
+			.json({ error: "Failed to fetch products" });
 	}
 
+	const data = await response.json();
 	res.status(200).json(data.products);
 }

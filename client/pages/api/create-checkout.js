@@ -2,7 +2,7 @@ function toStorefrontId(numericId) {
 	const globalId = `gid://shopify/ProductVariant/${numericId}`;
 	return Buffer.from(globalId).toString("base64");
 }
-function redirectToCheckout(variantId, quantity = 1) {
+export function redirectToCheckout(variantId, quantity = 1) {
 	const domain = process.env.SHOPIFY_STORE_DOMAIN;
 	// Redirect user to cart URL (with the variant and quantity)
 	const url = `https://${domain}/cart/${variantId}:${quantity}`;

@@ -3,14 +3,14 @@ const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
 const SHOPIFY_API_URL = `https://${domain}/api/2023-07/graphql.json`;
 
-export async function shopifyFetch({ query, variables = {} }) {
+export async function shopifyFetch({ query }) {
 	const res = await fetch(SHOPIFY_API_URL, {
 		method: "POST",
 		headers: {
 			"X-Shopify-Storefront-Access-Token": storefrontAccessToken,
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ query, variables }),
+		body: JSON.stringify({ query }),
 	});
 
 	const json = await res.json();

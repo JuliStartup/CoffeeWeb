@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
 				<div className="w-full">
 					<Nav />
 					<main>{children}</main>
-					<Footer />
+					{/* <Footer /> */}
 				</div>
 			</body>
 		</html>
