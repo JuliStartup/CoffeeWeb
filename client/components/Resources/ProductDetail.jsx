@@ -1,5 +1,6 @@
 "use client";
 
+import StoreService from "@/services/StoreService";
 import { useEffect, useState } from "react";
 
 export default function ProductDetail({ productId, onBack }) {
@@ -9,16 +10,21 @@ export default function ProductDetail({ productId, onBack }) {
 	const total = (quantity * parseFloat(price)).toFixed(2);
 
 	useEffect(() => {
+		const fetchProductInfo = async () => {
+			try {
+				const { data } = await StoreService.getProductInfo(productId);
+				setProduct(data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
 		if (productId) {
-			fetch(`/api/product/${productId}`)
-				.then((res) => res.json())
-				.then(setProduct)
-				.catch(console.error);
+			fetchProductInfo();
 		}
 	}, [productId]);
 
 	const handleBuyNow = (id) => {
-		const url = `https://${domain}/${id}:${quantity}`;
+		const url = `https://wyndclub.myshopify.com/cart/${id}:${quantity}`;
 		window.location.href = url;
 	};
 

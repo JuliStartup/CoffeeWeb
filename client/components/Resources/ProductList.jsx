@@ -1,20 +1,26 @@
 "use client";
 
+import StoreService from "@/services/StoreService";
 import { useEffect, useState } from "react";
 
 export default function ProductList({ onSelect }) {
 	const [products, setProducts] = useState([]);
 
 	useEffect(() => {
-		fetch("/api/products")
-			.then((res) => res.json())
-			.then(setProducts)
-			.catch(console.error);
+		const fetchAllProducts = async () => {
+			try {
+				const { data } = await StoreService.getAllProducts();
+				setProducts(data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		fetchAllProducts();
 	}, []);
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-gray-50 pl-[6em]">
-			{products.map((product) => {
+			{products?.map((product) => {
 				const roastHandle = product.handle.toLowerCase();
 				let roastLevel = 0;
 				if (roastHandle.includes("light")) roastLevel = 1;
