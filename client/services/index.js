@@ -1,8 +1,8 @@
-import { BASE_URL } from "@/next.config.mjs";
 import axios from "axios";
 
+const BASE_URL = "https://wyndclub.onrender.com/api";
 export const API = axios.create({
-	baseURL: process.env.NEXT_REACT_APP_BASE_URL,
+	baseURL: BASE_URL,
 });
 
 const withAuthHeader = {
@@ -13,8 +13,7 @@ const withAuthHeader = {
 };
 
 export const buildURL = (path, queryParams) => {
-	console.log("BASE_URL=", BASE_URL, process.env.NEXT_SHOPIFY_STORE_DOMAIN);
-	const url = new URL("http://localhost:5000/api");
+	const url = new URL(BASE_URL);
 	url.pathname += path;
 
 	url.searchParams.set("page", queryParams?.page);

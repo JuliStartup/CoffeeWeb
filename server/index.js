@@ -23,7 +23,6 @@ const path = require("path");
 const corsOptions = require("./config");
 
 const PORT = process.env.PORT;
-const MONGO_URI = process.env.DB_CONNECTION_URL_STAGING_CRM;
 const limiter = rateLimit({
 	windowMs: 60 * 1000, // 1 minute
 	max: 100, // Limit each IP to 100 requests per windowMs
