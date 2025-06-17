@@ -1,11 +1,11 @@
 import NewsletterSignup from "@/components/Resources/NewsletterSignup";
-import ThemeCards from "@/components/Resources/Purple-card";
+import TabCards from "@/components/Resources/TabCards";
 
 export default function Page() {
 	return (
 		<>
 			<NewsletterSignup />
-			<ThemeCards />
+			<TabCards />
 		</>
 	);
 }

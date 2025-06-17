@@ -1,11 +1,11 @@
 import Hero from "@/components/home/Hero";
-import ThemeCards from "@/components/Resources/Purple-card";
+import TabCards from "@/components/Resources/TabCards";
 
 export default function Home() {
 	return (
 		<>
 			<Hero />
-			<ThemeCards />
+			<TabCards />
 		</>
 	);
 }

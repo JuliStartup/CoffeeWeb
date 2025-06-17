@@ -5,10 +5,13 @@
 :root {
 	--primaryColor: #01193d;
 	--beige: #e5d5bc;
-	--card-bg: #e6ddcd;
+	--tab_card_bg: #e6ddcd;
+	--product_bg: rgb(250 247 242);
 	--card_TextColor: #8b6f72;
 	--sec12: #fffbf5;
 	--sec23: #f7f5f7;
+	--badge: #cca49a;
+	--silver: hsl(240deg 2.56% 92.35%);
 }
 body {
 	overflow-x: hidden;

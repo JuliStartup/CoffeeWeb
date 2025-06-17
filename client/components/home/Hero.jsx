@@ -1,24 +1,37 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { useEffect, useRef } from "react";
-import BlurText from "./BlurText";
 
 export default function Hero() {
 	const videoRef = useRef(null);
+	const videoRef1 = useRef(null);
 
 	useEffect(() => {
 		if (videoRef.current) {
 			videoRef.current.playbackRate = 0.3;
 		}
+		if (videoRef1.current) {
+			videoRef1.current.playbackRate = 0.3;
+		}
 	}, []);
 	return (
-		<div className="relative bg-gradient-to-b from-[#f8f8fb] to-[#f9f8fa] w-full overflow-hidden flex items-center justify-center">
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-0 pl-4 items-center bg-white">
-				<div className="space-y-4 text-center xl:text-left">
+		<div className="relative bg-gradient-to-b from-[#f8f8fb] to-[#f9f8fa] w-full overflow-hidden flex items-center justify-center mt-[-3em]">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-0 items-center bg-white">
+				<div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+					<video
+						src="./cover.mp4"
+						className="w-full h-full object-cover transform scale-x-1"
+						autoPlay
+						loop
+						muted
+						playsInline
+						ref={videoRef1}
+					/>
+				</div>
+				{/* <div className="space-4 text-center xl:text-left">
 					<h1>
 						<BlurText
-							text="Streamline your business processes"
+							text="Subscribe and save"
 							delay={50}
 							animateBy="words"
 							direction="top"
@@ -36,7 +49,7 @@ export default function Hero() {
 							Start Free Trial
 						</a>
 					</div>
-				</div>
+				</div> */}
 				<div className="relative aspect-[4/3] overflow-hidden bg-transparent">
 					<img
 						src="./assets/SubscriptionBox.png"

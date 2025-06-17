@@ -3,20 +3,23 @@
 import { useState } from "react";
 import ProductDetail from "./ProductDetail";
 import ProductList from "./ProductList";
+import Subscription from "./Subscription";
 
 export default function Shop() {
 	const [selectedId, setSelectedId] = useState(null);
 
 	return (
-		<div className="p-6">
-			<h1 className="text-2xl font-bold mb-4">All Products</h1>
+		<div className="max-w-8xl mx-auto mt-0">
 			{selectedId ? (
 				<ProductDetail
 					productId={selectedId}
 					onBack={() => setSelectedId(null)}
 				/>
 			) : (
-				<ProductList onSelect={setSelectedId} />
+				<div className="bg-gray-50">
+					<ProductList onSelect={setSelectedId} />
+					<Subscription />
+				</div>
 			)}
 		</div>
 	);
