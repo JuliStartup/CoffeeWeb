@@ -5,7 +5,7 @@ const corsOptions = {
 		"http://localhost:3000",
 		"http://localhost:3001",
 		"http://localhost:5001",
-		"https://test-crm-staging.netlify.app",
+		"https://wyndclubtesting.netlify.app",
 	],
 	methods: ["GET", "POST", "PUT", "DELETE"],
 	credentials: true, // Allow cookies to be sent
