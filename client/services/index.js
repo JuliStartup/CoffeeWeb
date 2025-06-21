@@ -1,6 +1,8 @@
 import axios from "axios";
+const WEB = "https://wyndclub.onrender.com/api";
+const LOCAL = "http://localhost:5000/api";
 
-const BASE_URL = "https://wyndclub.onrender.com/api";
+const BASE_URL = WEB;
 export const API = axios.create({
 	baseURL: BASE_URL,
 });
