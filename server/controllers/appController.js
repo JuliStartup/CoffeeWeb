@@ -10,7 +10,7 @@ const graphqlBaseUrl = `https://${shop}/api/${apiVersion}/graphql.json`;
 const getProducts = async (req, res) => {
 	try {
 		const response = await fetch(
-			`${baseURL}/products.json?status=active&fields=id,title`,
+			`${baseURL}/products.json?status=active&fields=id,title,tags`,
 			{
 				headers: {
 					"X-Shopify-Access-Token": token,
