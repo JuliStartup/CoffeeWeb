@@ -49,7 +49,7 @@ export default function ProductDetail({ productId, onBack }) {
 		const parts = variantId.split("/");
 		const numericId = parts[parts.length - 1];
 
-		const url = `https://wyndclub.myshopify.com/cart/${numericId}:${quantity}`;
+		const url = `https://wyndclub.myshopify.com/cart/${numericId}:${selectedQty}`;
 		window.location.href = url;
 	};
 
