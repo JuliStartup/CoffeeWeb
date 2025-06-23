@@ -14,6 +14,7 @@
 	--highlight: rgba(241, 87, 75, 1);
 	--silver: hsl(240deg 2.56% 92.35%);
 	--featured: #647533;
+	--selected: #299479;
 }
 body {
 	overflow-x: hidden;

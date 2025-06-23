@@ -8,6 +8,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 	const [quantity, setQuantity] = useState(1);
 	const price = products?.variants?.edges[0].node?.price?.amount || 0;
 	const total = (quantity * parseFloat(price)).toFixed(2);
+
 	const handleBuyNow = (variantId) => {
 		const parts = variantId.split("/");
 		const numericId = parts[parts.length - 1];
@@ -106,9 +107,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 											}
 										</p>
 									</div>
-									<div className="prose">
-										{product?.metaFields?.product?.description}
-									</div>
+									<div>{product?.metaFields?.product?.description}</div>
 
 									<div className="flex justify-between items-end gap-2 w-[fit-content]">
 										<div className="flex items-center gap-2">
