@@ -31,7 +31,7 @@ export default function TabCards() {
 						}`}
 					>
 						<span
-							className="card_color font-semibold text-[0.85rem] lg:text-lg "
+							className="text-[--card-text-color] font-semibold text-[0.85rem] lg:text-lg "
 							style={{
 								color: "var(--card_TextColor)",
 								textTransform: "uppercase",

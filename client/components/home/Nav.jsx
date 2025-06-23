@@ -4,7 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { memo, useRef, useState } from "react";
 
-import { GlobalDropdown, PlatformDropdown } from "./Dropdowns";
+import { Gift, ShoppingBag, SlashSquare, Star, User } from "lucide-react";
+import { GlobalDropdown } from "./Dropdowns";
 import MobileMenu from "./MobileMenu";
 import TopBanner from "./TopBanner";
 
@@ -19,7 +20,21 @@ function Nav() {
 	const dropdownRef = useRef(null);
 	const globalDropdownRef = useRef(null);
 	const containerRef = useRef(null);
-
+	const NAV_LINKS = [
+		{ name: "Franchise", icon: <Star />, color: "text-[--highlight]" },
+		{ name: "Wholesale", icon: <SlashSquare />, color: "text-[--highlight]" },
+		{ name: "Join Club", icon: <Gift />, color: "text-[--highlight]" },
+		{ name: "Account", icon: <User /> },
+		{
+			name: "Cart",
+			icon: <ShoppingBag />,
+			badge: (
+				<span className="absolute bg-[--highlight] rounded-full text-sm text-white text-center right-[24em] w-[20px] h-[20px] top-1">
+					0
+				</span>
+			),
+		},
+	];
 	// Close dropdowns if clicking outside
 	React.useEffect(() => {
 		const handleClickOutside = (event) => {
@@ -92,18 +107,17 @@ function Nav() {
 			<TopBanner />
 
 			{/* Navigation */}
-			<nav className="nav w-full h-[82px] bg-[#f8f8fb] backdrop-blur-[7.1px] z-[900]">
+			<nav className="nav w-full h-[82px] bg-transparent z-[900]">
 				<div className="w-[90vw] mx-auto h-full flex items-center justify-between relative">
 					{/* Logo - Centered on mobile, left on desktop */}
-					<div className="xl:hidden absolute left-1/2 transform -translate-x-1/2">
+					<div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 text-lg">
 						<a href="/">
 							WYND CLUB
 							{/* <img className="h-[40px]" src="logo small.png" alt="Logo" /> */}
 						</a>
 					</div>
-
 					{/* Desktop Logo */}
-					<div className="hidden xl:block">
+					<div className="hidden xl:block text-xl">
 						<a href="/">
 							WYND CLUB
 							{/* <img className="h-[50px]" src="logo small.png" alt="Logo" /> */}
@@ -115,16 +129,16 @@ function Nav() {
             Changed “Menu” → “≡” for the open state
           */}
 					<button
-						className="xl:hidden z-50 absolute right-4 text-[30px] font-300"
+						className="xl:hidden z-50 absolute right-4 text-[30px] font-300 top-2 "
 						onClick={() => setIsMenuOpen((prev) => !prev)}
 						aria-label="Toggle menu"
 					>
 						{isMenuOpen ? "X" : "≡"}
 					</button>
-
 					{/* Mobile Menu */}
 					{isMenuOpen && (
 						<MobileMenu
+							menus={NAV_LINKS}
 							isMenuOpen={isMenuOpen}
 							toggleMenu={() => setIsMenuOpen(false)}
 							isPlatformDropdownOpen={isPlatformDropdownOpen}
@@ -133,24 +147,25 @@ function Nav() {
 							}
 						/>
 					)}
-
 					{/* Desktop Menu */}
 					<div className="hidden xl:flex items-center py-2 gap-[5px]">
+						{NAV_LINKS.map(({ name, icon, color, badge }) => (
+							<a
+								key={name}
+								className="flex flex-col items-center font-twk font-thin px-4 py-2 rounded-md transition-colors duration-300 text-neutral-600 hover:bg-gray-200"
+								href="/"
+							>
+								{badge}
+								<div className={color}>{icon}</div>
+								{name}
+							</a>
+						))}
 						<a
-							className="font-twk font-thin px-4 py-2 rounded-md transition-colors duration-300 text-neutral-600 hover:bg-gray-200"
+							className="font-twk font-thin px-4 py-2 rounded-md transition-colors duration-300 text-neutral-600 hover:bg-gray-200 mr-[2em]"
 							href="/"
 						>
-							Home
+							(234) 224-4444
 						</a>
-						<PlatformDropdown
-							isOpen={isPlatformDropdownOpen}
-							toggleDropdown={() => setIsPlatformDropdownOpen((prev) => !prev)}
-							ref={dropdownRef}
-						/>
-					</div>
-
-					{/* Desktop Buttons */}
-					<div className="hidden xl:flex items-center gap-[30px]">
 						<GlobalDropdown
 							isOpen={isGlobalDropdownOpen}
 							toggleDropdown={() => setIsGlobalDropdownOpen((prev) => !prev)}
@@ -159,14 +174,6 @@ function Nav() {
 					</div>
 				</div>
 			</nav>
-
-			{/* Overlay for platform dropdown on desktop */}
-			{isPlatformDropdownOpen && (
-				<div
-					className="fixed inset-0 bg-transparent z-40 hidden xl:block"
-					onClick={() => setIsPlatformDropdownOpen(false)}
-				/>
-			)}
 		</div>
 	);
 }

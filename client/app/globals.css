@@ -11,7 +11,9 @@
 	--sec12: #fffbf5;
 	--sec23: #f7f5f7;
 	--badge: #cca49a;
+	--highlight: rgba(241, 87, 75, 1);
 	--silver: hsl(240deg 2.56% 92.35%);
+	--featured: #647533;
 }
 body {
 	overflow-x: hidden;
@@ -150,6 +152,9 @@ body {
 	animation: dots 5s infinite;
 	animation-delay: 2.5s;
 }
-.card_color {
-	color: var(--card-text-color);
+
+.btn-buy {
+	background-color: var(--highlight);
+	border-radius: 9999px;
+	padding: 0.5em 2.25rem;
 }
