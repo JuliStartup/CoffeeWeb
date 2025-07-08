@@ -1,6 +1,6 @@
 "use client";
 
-import { getNumericCode } from "@/pages/common";
+import { getNumericCode } from "@/services";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { useRef, useState } from "react";
 

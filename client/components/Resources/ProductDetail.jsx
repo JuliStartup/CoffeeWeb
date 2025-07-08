@@ -1,9 +1,9 @@
 "use client";
 
-import { getNumericCode } from "@/pages/common";
+import { getNumericCode } from "@/services";
 import StoreService from "@/services/StoreService";
 import { CircleCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ProductDetail({ productId, onBack }) {
 	const quantityOptions = [
@@ -14,34 +14,28 @@ export default function ProductDetail({ productId, onBack }) {
 			label: <span className="line-through">$33.99</span>,
 		},
 		{ qty: 3, price: 17.1, saved: 10, label: "Per Pack" },
-		{ qty: 6, price: 15.99, saved: 20, label: "Per Pack" },
+		{ qty: 6, price: 15.19, saved: 20, label: "Per Pack" },
 	];
 
-	const frequencyOptions = [
-		"1 week subscription",
-		"2 week subscription",
-		"3 week subscription",
-		"4 week subscription",
-		"6 week subscription",
-		"12 week subscription",
-	];
+	const frequencyOptions = useRef(null);
 
 	const [product, setProduct] = useState(null);
-	const [sellingPlanId, setSellingPlanId] = useState(null);
 	const [flavors, setFlavors] = useState(null);
 	const [selectedImage, setSelectedImage] = useState("");
 	const [selectedQty, setSelectedQty] = useState(1);
-	const [selectedOption, setSelectedOption] = useState("");
-	const [frequency, setFrequency] = useState("monthly");
+	const [selectedOption, setSelectedOption] = useState("onetime");
+	const [frequency, setFrequency] = useState("");
 
 	useEffect(() => {
 		const fetchProductInfo = async () => {
 			try {
 				const { data } = await StoreService.getProductInfo(productId);
 				setProduct(data.product);
-				setSellingPlanId(
+				frequencyOptions.current =
+					data.product?.variants?.edges[0].node?.sellingPlanAllocations?.edges;
+				setFrequency(
 					data.product?.variants?.edges[0].node?.sellingPlanAllocations
-						?.edges[1].node?.sellingPlan.id,
+						?.edges[0].node?.sellingPlan.id,
 				);
 				setSelectedImage(data.product?.images?.edges[0]?.node?.src);
 				setFlavors(data?.flavor);
@@ -54,10 +48,28 @@ export default function ProductDetail({ productId, onBack }) {
 		}
 	}, [productId]);
 
-	const handleBuyNow = (variantId) => {
+	const handleSubscribeNow = async () => {
+		const url = `https://wyndclub.myshopify.com/cart`;
+		const addCart = `${url}/add.js`;
+		const body = {
+			id: getNumericCode(product?.variants?.edges[0].node?.id),
+			quantity: selectedQty,
+			selling_plan: getNumericCode(frequency),
+		};
+		await fetch(addCart, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		});
+		window.location.href = url;
+	};
+
+	const handleBuyNow = () => {
 		const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
-			variantId,
-		)}:${selectedQty}?selling_plan=${getNumericCode(sellingPlanId)}`;
+			product?.variants?.edges[0].node?.id,
+		)}:${selectedQty}`;
 		window.location.href = url;
 	};
 
@@ -199,9 +211,12 @@ export default function ProductDetail({ productId, onBack }) {
 											onChange={(e) => setFrequency(e.target.value)}
 											className="w-full border border-gray-300 rounded-lg p-1  mb-1"
 										>
-											{frequencyOptions.map((option) => (
-												<option key={option} value={option}>
-													{option.charAt(0).toUpperCase() + option.slice(1)}
+											{frequencyOptions?.current.map(({ node }) => (
+												<option
+													key={node.sellingPlan.id}
+													value={node.sellingPlan.id}
+												>
+													{node.sellingPlan.name}
 												</option>
 											))}
 										</select>
@@ -244,8 +259,9 @@ export default function ProductDetail({ productId, onBack }) {
 					<div
 						className="flex items-center justify-center us-max:flex-col 2xl:flex-row lg:flex-col"
 						onClick={() =>
-							selectedOption === "onetime" &&
-							handleBuyNow(product?.variants?.edges[0].node?.id)
+							selectedOption === "onetime"
+								? handleBuyNow()
+								: handleSubscribeNow()
 						}
 					>
 						<div className="py-2 mb-4 btn-buy text-center text-bold text-white md:mb-0 text-lg sm-only:px-1.5 cursor-pointer w-full">
