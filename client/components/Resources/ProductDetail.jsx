@@ -1,5 +1,6 @@
 "use client";
 
+import { getNumericCode } from "@/pages/common";
 import StoreService from "@/services/StoreService";
 import { CircleCheck } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -18,11 +19,15 @@ export default function ProductDetail({ productId, onBack }) {
 
 	const frequencyOptions = [
 		"1 week subscription",
+		"2 week subscription",
 		"3 week subscription",
-		"monthly subscription",
+		"4 week subscription",
+		"6 week subscription",
+		"12 week subscription",
 	];
 
 	const [product, setProduct] = useState(null);
+	const [sellingPlanId, setSellingPlanId] = useState(null);
 	const [flavors, setFlavors] = useState(null);
 	const [selectedImage, setSelectedImage] = useState("");
 	const [selectedQty, setSelectedQty] = useState(1);
@@ -34,6 +39,10 @@ export default function ProductDetail({ productId, onBack }) {
 			try {
 				const { data } = await StoreService.getProductInfo(productId);
 				setProduct(data.product);
+				setSellingPlanId(
+					data.product?.variants?.edges[0].node?.sellingPlanAllocations
+						?.edges[1].node?.sellingPlan.id,
+				);
 				setSelectedImage(data.product?.images?.edges[0]?.node?.src);
 				setFlavors(data?.flavor);
 			} catch (error) {
@@ -46,10 +55,9 @@ export default function ProductDetail({ productId, onBack }) {
 	}, [productId]);
 
 	const handleBuyNow = (variantId) => {
-		const parts = variantId.split("/");
-		const numericId = parts[parts.length - 1];
-
-		const url = `https://wyndclub.myshopify.com/cart/${numericId}:${selectedQty}`;
+		const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
+			variantId,
+		)}:${selectedQty}?selling_plan=${getNumericCode(sellingPlanId)}`;
 		window.location.href = url;
 	};
 

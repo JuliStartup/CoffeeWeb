@@ -1,5 +1,6 @@
 "use client";
 
+import { getNumericCode } from "@/pages/common";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -9,11 +10,10 @@ export default function FeaturedProducts({ products, onSelect }) {
 	const price = products?.variants?.edges[0].node?.price?.amount || 0;
 	const total = (quantity * parseFloat(price)).toFixed(2);
 
-	const handleBuyNow = (variantId) => {
-		const parts = variantId.split("/");
-		const numericId = parts[parts.length - 1];
-
-		const url = `https://wyndclub.myshopify.com/cart/${numericId}:${quantity}`;
+	const handleBuyNow = (variantId, sellingPlanId) => {
+		const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
+			variantId,
+		)}:${quantity}?selling_plan=${getNumericCode(sellingPlanId)}`;
 		window.location.href = url;
 	};
 
@@ -50,6 +50,9 @@ export default function FeaturedProducts({ products, onSelect }) {
 								return flat.label;
 							},
 						) || [];
+					const sellingPlanId =
+						product?.variants?.edges[0].node?.sellingPlanAllocations?.edges[1]
+							.node?.sellingPlan.id;
 					return (
 						<div
 							key={product.id}
@@ -143,6 +146,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 											handleBuyNow(
 												product?.metaFields?.product?.variants?.edges[0].node
 													?.id,
+												sellingPlanId,
 											)
 										}
 									>

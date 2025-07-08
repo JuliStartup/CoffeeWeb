@@ -1,19 +1,19 @@
 const shop = process.env.SHOPIFY_STORE_DOMAIN;
-const token = process.env.SHOPIFY_ADMIN_API_TOKEN;
+const adminToken = process.env.SHOPIFY_ADMIN_API_TOKEN;
 const storeToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
 const apiVersion = "2025-04";
-const baseURL = `https://${shop}/admin/api/${apiVersion}`;
 
-const graphqlBaseUrl = `https://${shop}/api/${apiVersion}/graphql.json`;
+const adminBaseUrl = `https://${shop}/admin/api/${apiVersion}`;
+const storeBaseUrl = `https://${shop}/api/${apiVersion}/graphql.json`;
 
 const getProducts = async (req, res) => {
 	try {
 		const response = await fetch(
-			`${baseURL}/products.json?status=active&fields=id,title,tags`,
+			`${adminBaseUrl}/products.json?status=active&fields=id,title,tags`,
 			{
 				headers: {
-					"X-Shopify-Access-Token": token,
+					"X-Shopify-Access-Token": adminToken,
 					"Content-Type": "application/json",
 				},
 			},
@@ -41,10 +41,10 @@ const getProducts = async (req, res) => {
  * @param {Object} variables - Optional GraphQL variables
  * @returns {Promise<Object>} - API response JSON
  */
-async function callShopifyGraphQL(id) {
+async function callShopifyGraphQL(productId) {
 	const query = `
    {
-  product(id: "gid://shopify/Product/${id}") {
+  product(id: "gid://shopify/Product/${productId}") {
     id
     title
 	description
@@ -74,6 +74,26 @@ async function callShopifyGraphQL(id) {
             amount
             currencyCode
           }
+          sellingPlanAllocations(first: 10) {
+            edges {
+              node {
+                priceAdjustments {
+                  price {
+                    amount
+                    currencyCode
+                  }
+                }
+                sellingPlan {
+                  id
+                  name
+                  options {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+          }
           availableForSale
           selectedOptions {
             name
@@ -101,7 +121,7 @@ async function callShopifyGraphQL(id) {
     }
   }
 }`;
-	const res = await fetch(graphqlBaseUrl, {
+	const res = await fetch(storeBaseUrl, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
