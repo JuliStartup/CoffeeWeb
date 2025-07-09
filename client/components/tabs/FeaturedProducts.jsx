@@ -2,21 +2,23 @@
 
 import { useCart } from "@/contexts/CartContext";
 import { getNumericCode } from "@/services";
+import StoreService from "@/services/StoreService";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function FeaturedProducts({ products, onSelect }) {
 	const scrollRef = useRef(null);
 	const [quantity, setQuantity] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const price =
 		products[0]?.metaFields?.product?.variants?.edges[0].node?.price?.amount ||
 		0;
-	const { updateQuantity } = useCart();
+	const { updateCart, updateQuantity } = useCart();
 
 	useEffect(() => {
 		setTotalAmount((quantity * parseFloat(price)).toFixed(2));
-		updateQuantity(quantity);
 	}, [quantity]);
 
 	const handleBuyNow = (variantId) => {
@@ -24,6 +26,22 @@ export default function FeaturedProducts({ products, onSelect }) {
 			variantId,
 		)}:${quantity}`;
 		window.location.href = url;
+	};
+
+	const handleCart = async (variantId) => {
+		setIsSubmitting(true);
+		try {
+			const { data } = await StoreService.addCart({
+				variantId,
+				quantity,
+			});
+			toast.success("Item added to cart!");
+			updateQuantity(quantity);
+			updateCart(data.cart.checkoutUrl);
+		} catch (error) {
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	const scroll = (direction) => {
@@ -151,9 +169,10 @@ export default function FeaturedProducts({ products, onSelect }) {
 									</div>
 									<button
 										className="bg-[--beige] text-[--card_TextColor] px-6 py-4 font-bold rounded-lg hover:bg-[--beige] w-full"
-										onClick={() => handleBuyNow(productId)}
+										onClick={() => handleCart(productId)}
 									>
-										ADD TO CART - ${totalAmount}
+										{isSubmitting ? "Added" : "ADD TO CART"}
+										<Toaster />
 									</button>
 								</div>
 							</div>

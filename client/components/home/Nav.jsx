@@ -16,7 +16,7 @@ function Nav() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isPlatformDropdownOpen, setIsPlatformDropdownOpen] = useState(false);
 	const [isGlobalDropdownOpen, setIsGlobalDropdownOpen] = useState(false);
-	const { cart } = useCart();
+	const { cart, checkoutUrl } = useCart();
 
 	const dropdownRef = useRef(null);
 	const globalDropdownRef = useRef(null);
@@ -34,6 +34,7 @@ function Nav() {
 					{cart}
 				</span>
 			),
+			url: checkoutUrl,
 		},
 	];
 	// Close dropdowns if clicking outside
@@ -148,11 +149,11 @@ function Nav() {
 					)}
 					{/* Desktop Menu */}
 					<div className="hidden xl:flex items-center py-2 gap-[5px]">
-						{NAV_LINKS.map(({ name, icon, color, badge }) => (
+						{NAV_LINKS.map(({ name, icon, color, badge, url }) => (
 							<a
 								key={name}
 								className="flex flex-col items-center font-twk font-thin px-4 py-2 rounded-md transition-colors duration-300 text-neutral-600 hover:bg-gray-200"
-								href="/"
+								href={url || "/"}
 							>
 								{badge}
 								<div className={color}>{icon}</div>

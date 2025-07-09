@@ -1,9 +1,10 @@
 "use client";
 
-import { getNumericCode } from "@/services";
+import { useCart } from "@/contexts/CartContext";
 import StoreService from "@/services/StoreService";
 import { CircleCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ProductDetail({ product, flavors, onBack }) {
 	const quantityOptions = [
@@ -22,6 +23,9 @@ export default function ProductDetail({ product, flavors, onBack }) {
 	const [selectedQty, setSelectedQty] = useState(1);
 	const [selectedOption, setSelectedOption] = useState("onetime");
 	const [subscriptionPlanId, setSubscriptionPlanId] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [actionLabel, setActionLabel] = useState("Add to Cart");
+	const { updateCart, updateQuantity } = useCart();
 
 	useEffect(() => {
 		if (product) {
@@ -35,22 +39,43 @@ export default function ProductDetail({ product, flavors, onBack }) {
 		}
 	}, [product]);
 
-	const handleSubscribeNow = async () => {
-		const body = {
-			id: product?.variants?.edges[0].node?.id,
-			quantity: selectedQty,
-			selling_plan: subscriptionPlanId,
-		};
-		const { data } = await StoreService.addSubscriptionPlan(body);
-		window.location.href = data.cart.checkoutUrl;
+	useEffect(() => {
+		if (selectedOption === "subscribe") {
+			setActionLabel(isSubmitting ? "Subscribed" : `Start Subscription`);
+		} else {
+			setActionLabel(isSubmitting ? "Added" : `Add to Cart`);
+		}
+	}, [selectedOption, isSubmitting]);
+
+	const handleCart = async () => {
+		setIsSubmitting(true);
+		try {
+			const { data } =
+				selectedOption === "subscribe"
+					? await StoreService.addSubscriptionPlan({
+							id: product?.variants?.edges[0].node?.id,
+							quantity: selectedQty,
+							selling_plan: subscriptionPlanId,
+					  })
+					: await StoreService.addCart({
+							variantId: product?.variants?.edges[0].node?.id,
+							quantity: selectedQty,
+					  });
+			toast.success("Item added to cart!");
+			updateQuantity(selectedQty);
+			updateCart(data.cart.checkoutUrl);
+		} catch (error) {
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
-	const handleBuyNow = () => {
-		const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
-			product?.variants?.edges[0].node?.id,
-		)}:${selectedQty}`;
-		window.location.href = url;
-	};
+	// const handleBuyNow = () => {
+	// 	const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
+	// 		product?.variants?.edges[0].node?.id,
+	// 	)}:${selectedQty}`;
+	// 	window.location.href = url;
+	// };
 
 	return (
 		<div className="py-4 max-w-7xl mx-auto">
@@ -237,16 +262,11 @@ export default function ProductDetail({ product, flavors, onBack }) {
 					</div>
 					<div
 						className="flex items-center justify-center us-max:flex-col 2xl:flex-row lg:flex-col"
-						onClick={() =>
-							selectedOption === "onetime"
-								? handleBuyNow()
-								: handleSubscribeNow()
-						}
+						onClick={handleCart}
 					>
 						<div className="py-2 mb-4 btn-buy text-center text-bold text-white md:mb-0 text-lg sm-only:px-1.5 cursor-pointer w-full">
-							{selectedOption === "subscribe"
-								? `Start Subscription`
-								: `Add to Cart`}
+							{actionLabel}
+							<Toaster />
 						</div>
 					</div>
 				</div>

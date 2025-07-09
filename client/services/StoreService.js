@@ -12,6 +12,10 @@ const StoreService = {
 	async addSubscriptionPlan(data) {
 		return apiService.post("/", data);
 	},
+
+	async addCart(data) {
+		return apiService.post("/cart", data);
+	},
 };
 
 export default StoreService;

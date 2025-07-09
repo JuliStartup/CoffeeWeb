@@ -9,4 +9,6 @@ router.get("/:id", appController.getProduct);
 
 router.post("/", appController.addSellingPlanInfo);
 
+router.post("/cart", appController.addCart);
+
 module.exports = router;
