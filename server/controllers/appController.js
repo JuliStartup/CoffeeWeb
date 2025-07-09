@@ -127,9 +127,7 @@ async function callShopifyGraphQL(productId) {
 			"Content-Type": "application/json",
 			"X-Shopify-Storefront-Access-Token": storeToken,
 		},
-		body: JSON.stringify({
-			query,
-		}),
+		body: JSON.stringify({ query }),
 	});
 
 	const json = await res.json();
@@ -144,6 +142,70 @@ async function callShopifyGraphQL(productId) {
 	}
 
 	return json.data;
+}
+
+async function createCartWithSubscription(variantId, quantity, sellingPlanId) {
+	const query = `mutation CreateCartWithSubscription {
+  cartCreate(
+    input: {
+      lines: [
+        {
+              quantity: ${quantity}
+              merchandiseId: "${variantId}"
+              sellingPlanId: "${sellingPlanId}"
+        }
+      ]
+    }
+  ) {
+    cart {
+      id
+      checkoutUrl
+      lines(first: 10) {
+        edges {
+          node {
+            id
+            quantity
+            sellingPlanAllocation {
+              sellingPlan {
+                id
+                name
+              }
+            }
+            merchandise {
+              ... on ProductVariant {
+                id
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}`;
+	const res = await fetch(storeBaseUrl, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-Shopify-Storefront-Access-Token": storeToken,
+		},
+		body: JSON.stringify({ query }),
+	});
+
+	const json = await res.json();
+	if (json.errors) {
+		console.error(
+			"GraphQL Errors:",
+			json,
+			JSON.stringify(json.errors, null, 2),
+		);
+		throw new Error("GraphQL query failed.");
+	}
+	return json.data.cartCreate;
 }
 
 const getProduct = async (req, res) => {
@@ -186,22 +248,9 @@ const addSellingPlanInfo = async (req, res) => {
 	const { id, quantity, selling_plan } = req.body;
 
 	try {
-		const shopifyRes = await fetch(`https://${shop}/cart/add.js`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Cookie: req.headers.cookie || "",
-			},
-			body: JSON.stringify({ id, quantity, selling_plan }),
-		});
-		if (!shopifyRes.ok) {
-			const errorText = await shopifyRes.text();
-			return res.status(shopifyRes.status).send(errorText);
-		}
-		const data = await shopifyRes.json();
+		const data = await createCartWithSubscription(id, quantity, selling_plan);
 		res.status(200).json(data);
 	} catch (error) {
-		console.error(err);
 		res.status(404).json({ error: "Internal server error" });
 	}
 };

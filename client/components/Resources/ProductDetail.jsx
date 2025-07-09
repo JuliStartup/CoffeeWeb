@@ -49,14 +49,13 @@ export default function ProductDetail({ productId, onBack }) {
 	}, [productId]);
 
 	const handleSubscribeNow = async () => {
-		const url = `https://wyndclub.myshopify.com`;
 		const body = {
-			id: getNumericCode(product?.variants?.edges[0].node?.id),
+			id: product?.variants?.edges[0].node?.id,
 			quantity: selectedQty,
-			selling_plan: getNumericCode(frequency),
+			selling_plan: frequency,
 		};
 		const { data } = await StoreService.addSubscriptionPlan(body);
-		// window.location.href = `${url}/cart`;
+		window.location.href = data.cart.checkoutUrl;
 	};
 
 	const handleBuyNow = () => {
