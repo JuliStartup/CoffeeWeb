@@ -1,5 +1,5 @@
 import Hero from "@/components/home/Hero";
-import TabCards from "@/components/Resources/TabCards";
+import TabCards from "@/components/tabs/tab";
 
 export default function Home() {
 	return (

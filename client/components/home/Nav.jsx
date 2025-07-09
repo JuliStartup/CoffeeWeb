@@ -7,7 +7,6 @@ import React, { memo, useRef, useState } from "react";
 import { Gift, ShoppingBag, SlashSquare, Star, User } from "lucide-react";
 import { GlobalDropdown } from "./Dropdowns";
 import MobileMenu from "./MobileMenu";
-import TopBanner from "./TopBanner";
 
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -104,8 +103,6 @@ function Nav() {
 			ref={containerRef}
 			className="z-20 h-[70px] nav_wrapper relative flex flex-col items-center justify-between"
 		>
-			<TopBanner />
-
 			{/* Navigation */}
 			<nav className="nav w-full h-[82px] bg-transparent z-[900]">
 				<div className="w-[90vw] mx-auto h-full flex items-center justify-between relative">

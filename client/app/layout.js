@@ -1,4 +1,4 @@
-import Footer from "@/components/home/Footer";
+// import Footer from "@/components/home/Footer";
 import Nav from "@/components/home/Nav";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
