@@ -1,6 +1,7 @@
 console.log("NODE_ENV", process.env.NODE_ENV);
 
-if (process.env.NODE_ENV === "development") {
+const env = process.env.NODE_ENV;
+if (env === "development") {
 	require("dotenv").config({ path: ".env.local" });
 	console.log("Using .env.local file");
 } else {

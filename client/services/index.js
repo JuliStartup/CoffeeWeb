@@ -35,7 +35,7 @@ const fetchData = async (path, queryParams, params, signal) => {
 };
 
 const postData = async (path, data) => {
-	return API.post(buildURL(path), data);
+	return API.post(buildURL(path), data, withAuthHeader);
 };
 
 const putData = async (path, data, id, token) => {

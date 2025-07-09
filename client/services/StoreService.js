@@ -8,6 +8,10 @@ const StoreService = {
 	async getProductInfo(id) {
 		return apiService.get(`/${id}`);
 	},
+
+	async addSubscriptionPlan(data) {
+		return apiService.post("/", data);
+	},
 };
 
 export default StoreService;

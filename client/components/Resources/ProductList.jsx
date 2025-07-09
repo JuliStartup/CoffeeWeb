@@ -11,7 +11,7 @@ export default function ProductList({ onSelect, products }) {
 				// else if (roastHandle.includes("dark")) roastLevel = 3;
 
 				const flavors =
-					product.metaFields?.product.flavor.references?.edges.map(
+					product.metaFields?.product.flavor?.references?.edges.map(
 						({ node }) => {
 							const metaFields = node.fields || [];
 							const flat = metaFields.reduce((acc, field) => {
@@ -36,9 +36,10 @@ export default function ProductList({ onSelect, products }) {
 								</span>
 							)}
 							<img
-								src={product.metaFields.product.images?.edges[0].node.src}
+								src={product.metaFields.product.images?.edges[0]?.node.src}
 								alt={
-									product.metaFields.product.images?.edges[0].node.altText || ""
+									product.metaFields.product.images?.edges[0]?.node?.altText ||
+									""
 								}
 								className="w-full object-cover rounded-md mx-auto rounded-t-lg h-80"
 							/>

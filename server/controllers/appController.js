@@ -182,6 +182,29 @@ const getProduct = async (req, res) => {
 	}
 };
 
+const addSellingPlanInfo = async (req, res) => {
+	const { id, quantity, selling_plan } = req.body;
+
+	try {
+		const shopifyRes = await fetch(`https://${shop}/cart/add.js`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Cookie: req.headers.cookie || "",
+			},
+			body: JSON.stringify({ id, quantity, selling_plan }),
+		});
+		if (!shopifyRes.ok) {
+			const errorText = await shopifyRes.text();
+			return res.status(shopifyRes.status).send(errorText);
+		}
+		const data = await shopifyRes.json();
+		res.status(200).json(data);
+	} catch (error) {
+		console.error(err);
+		res.status(404).json({ error: "Internal server error" });
+	}
+};
 // 	try {
 // 		const query = `
 // {
@@ -290,4 +313,5 @@ const getProduct = async (req, res) => {
 module.exports = {
 	getProducts,
 	getProduct,
+	addSellingPlanInfo,
 };

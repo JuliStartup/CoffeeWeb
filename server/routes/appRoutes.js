@@ -7,4 +7,6 @@ router.get("/", appController.getProducts);
 
 router.get("/:id", appController.getProduct);
 
+router.post("/", appController.addSellingPlanInfo);
+
 module.exports = router;

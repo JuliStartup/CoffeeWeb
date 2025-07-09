@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
-		"devStart": "nodemon index.js",
+		"devStart": "cross-env NODE_ENV=development node index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
@@ -37,6 +37,7 @@
 		"node": ">=14.20.1"
 	},
 	"devDependencies": {
+		"cross-env": "^7.0.3",
 		"nodemon": "^3.0.1"
 	}
 }

@@ -40,7 +40,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 			>
 				{products?.map((product) => {
 					const flavors =
-						product.metaFields?.product.flavor.references?.edges.map(
+						product.metaFields?.product.flavor?.references?.edges.map(
 							({ node }) => {
 								const metaFields = node.fields || [];
 								const flat = metaFields.reduce((acc, field) => {
