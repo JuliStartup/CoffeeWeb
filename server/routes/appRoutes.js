@@ -11,4 +11,6 @@ router.post("/", appController.addSellingPlanInfo);
 
 router.post("/cart", appController.addCart);
 
+router.post("/update-cart", appController.updateCart);
+
 module.exports = router;

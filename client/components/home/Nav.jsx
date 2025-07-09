@@ -17,7 +17,7 @@ function Nav() {
 	const [isPlatformDropdownOpen, setIsPlatformDropdownOpen] = useState(false);
 	const [isGlobalDropdownOpen, setIsGlobalDropdownOpen] = useState(false);
 	const { cart, checkoutUrl } = useCart();
-
+	const cartUrl = "https://wyndclub.myshopify.com/cart";
 	const dropdownRef = useRef(null);
 	const globalDropdownRef = useRef(null);
 	const containerRef = useRef(null);
@@ -34,6 +34,7 @@ function Nav() {
 					{cart}
 				</span>
 			),
+			// url: cartUrl || checkoutUrl,
 			url: checkoutUrl,
 		},
 	];

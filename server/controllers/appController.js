@@ -1,4 +1,9 @@
-const { subscriptionQuery, oneTimeQuery, productQuery } = require("./queries");
+const {
+	subscriptionQuery,
+	oneTimeQuery,
+	productQuery,
+	lineItemToExistingCartQuery,
+} = require("./queries");
 
 const shop = process.env.SHOPIFY_STORE_DOMAIN;
 const adminToken = process.env.SHOPIFY_ADMIN_API_TOKEN;
@@ -71,7 +76,7 @@ async function callShopifyGraphQL(productId) {
 	return json.data;
 }
 
-async function createCart(variantId, quantity, sellingPlanId) {
+async function createCart({ variantId, quantity, sellingPlanId }) {
 	const query = sellingPlanId
 		? subscriptionQuery(variantId, quantity, sellingPlanId)
 		: oneTimeQuery(variantId, quantity);
@@ -97,6 +102,41 @@ async function createCart(variantId, quantity, sellingPlanId) {
 		throw new Error("GraphQL query failed.");
 	}
 	return json.data.cartCreate;
+}
+
+async function updateExistingCart({
+	variantId,
+	quantity,
+	sellingPlanId,
+	cartId,
+}) {
+	const query = lineItemToExistingCartQuery(
+		cartId,
+		variantId,
+		quantity,
+		sellingPlanId,
+	);
+	const res = await fetch(storeBaseUrl, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-Shopify-Storefront-Access-Token": storeToken,
+		},
+		body: JSON.stringify({
+			query,
+		}),
+	});
+
+	const json = await res.json();
+	if (json.errors) {
+		console.error(
+			"GraphQL Errors:",
+			json,
+			JSON.stringify(json.errors, null, 2),
+		);
+		throw new Error("GraphQL query failed.");
+	}
+	return json.data;
 }
 
 const getProduct = async (req, res) => {
@@ -134,10 +174,30 @@ const getProduct = async (req, res) => {
 		res.status(404).json({ error: error.message });
 	}
 };
+
 const addCart = async (req, res) => {
 	const { variantId, quantity } = req.body;
 	try {
-		const data = await createCart(variantId, quantity);
+		const data = await createCart({
+			variantId,
+			quantity,
+		});
+		res.status(200).json(data);
+	} catch (error) {
+		res.status(404).json({ error: "Internal server error" });
+	}
+};
+
+const updateCart = async (req, res) => {
+	const { cartId, variantId, quantity, selling_plan } = req.body;
+
+	try {
+		const data = await updateExistingCart({
+			variantId,
+			quantity,
+			cartId,
+			sellingPlanId: selling_plan,
+		});
 		res.status(200).json(data);
 	} catch (error) {
 		res.status(404).json({ error: "Internal server error" });
@@ -148,7 +208,11 @@ const addSellingPlanInfo = async (req, res) => {
 	const { id, quantity, selling_plan } = req.body;
 
 	try {
-		const data = await createCart(id, quantity, selling_plan);
+		const data = await createCart({
+			variantId: id,
+			quantity,
+			sellingPlanId: selling_plan,
+		});
 		res.status(200).json(data);
 	} catch (error) {
 		res.status(404).json({ error: "Internal server error" });
@@ -159,4 +223,5 @@ module.exports = {
 	getProduct,
 	addSellingPlanInfo,
 	addCart,
+	updateCart,
 };

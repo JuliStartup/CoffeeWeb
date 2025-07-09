@@ -166,6 +166,65 @@ const productQuery = (productId) => {
 	return query;
 };
 
+const lineItemToExistingCartQuery = (
+	cartId,
+	variantId,
+	quantity,
+	sellingPlanId,
+) => {
+	const query = sellingPlanId
+		? `mutation cartLinesAdd {
+  cartLinesAdd(
+    cartId: "${cartId}"
+    lines: [
+      {
+        quantity: ${quantity}
+        merchandiseId: "${variantId}"
+        sellingPlanId: "${sellingPlanId}"
+      }
+    ]
+  ) {
+    cart {
+      id
+      checkoutUrl
+      lines(first: 10) {
+        edges {
+          node {
+            id
+            quantity
+          }
+        }
+      }
+    }
+  }
+}`
+		: `mutation cartLinesAdd {
+  cartLinesAdd(
+    cartId: "${cartId}"
+    lines: [
+      {
+        quantity: ${quantity}
+        merchandiseId: "${variantId}"
+      }
+    ]
+  ) {
+    cart {
+      id
+      checkoutUrl
+      lines(first: 10) {
+        edges {
+          node {
+            id
+            quantity
+          }
+        }
+      }
+    }
+  }
+}`;
+
+	return query;
+};
 // 	try {
 // 		const query = `
 // {
@@ -276,4 +335,5 @@ module.exports = {
 	subscriptionQuery,
 	oneTimeQuery,
 	productQuery,
+	lineItemToExistingCartQuery,
 };

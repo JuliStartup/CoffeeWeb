@@ -15,7 +15,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 	const price =
 		products[0]?.metaFields?.product?.variants?.edges[0].node?.price?.amount ||
 		0;
-	const { updateCart, updateQuantity } = useCart();
+	const { cartID, updateCart, updateQuantity } = useCart();
 
 	useEffect(() => {
 		setTotalAmount((quantity * parseFloat(price)).toFixed(2));
@@ -31,16 +31,31 @@ export default function FeaturedProducts({ products, onSelect }) {
 	const handleCart = async (variantId) => {
 		setIsSubmitting(true);
 		try {
-			const { data } = await StoreService.addCart({
-				variantId,
-				quantity,
-			});
-			toast.success("Item added to cart!");
-			updateQuantity(quantity);
-			updateCart(data.cart.checkoutUrl);
+			if (cartID) {
+				const { data } = await StoreService.updateCart({
+					cartId: cartID,
+					variantId,
+					quantity,
+				});
+				toast.success("Cart updated successfully!");
+				updateQuantity(data?.cartLinesAdd?.cart?.lines?.edges?.length);
+				updateCart(
+					data?.cartLinesAdd?.cart?.id,
+					data?.cartLinesAdd?.cart?.checkoutUrl,
+				);
+			} else {
+				const { data } = await StoreService.addCart({
+					variantId,
+					quantity,
+				});
+				toast.success("Item added to cart!");
+				updateQuantity(data?.cart?.lines?.edges?.length);
+				updateCart(data?.cart?.id, data?.cart?.checkoutUrl);
+			}
 		} catch (error) {
 		} finally {
 			setIsSubmitting(false);
+			setQuantity(0);
 		}
 	};
 
@@ -168,7 +183,10 @@ export default function FeaturedProducts({ products, onSelect }) {
 										/>
 									</div>
 									<button
-										className="bg-[--beige] text-[--card_TextColor] px-6 py-4 font-bold rounded-lg hover:bg-[--beige] w-full"
+										disabled={quantity < 1}
+										className={`bg-[--beige] ${
+											quantity < 1 && "empty-cart"
+										} text-[--card_TextColor] px-6 py-4 font-bold rounded-lg w-full`}
 										onClick={() => handleCart(productId)}
 									>
 										{isSubmitting ? "Added" : "ADD TO CART"}

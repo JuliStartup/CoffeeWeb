@@ -25,7 +25,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 	const [subscriptionPlanId, setSubscriptionPlanId] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [actionLabel, setActionLabel] = useState("Add to Cart");
-	const { updateCart, updateQuantity } = useCart();
+	const { cartID, updateCart, updateQuantity } = useCart();
 
 	useEffect(() => {
 		if (product) {
@@ -50,20 +50,36 @@ export default function ProductDetail({ product, flavors, onBack }) {
 	const handleCart = async () => {
 		setIsSubmitting(true);
 		try {
-			const { data } =
-				selectedOption === "subscribe"
-					? await StoreService.addSubscriptionPlan({
-							id: product?.variants?.edges[0].node?.id,
-							quantity: selectedQty,
-							selling_plan: subscriptionPlanId,
-					  })
-					: await StoreService.addCart({
-							variantId: product?.variants?.edges[0].node?.id,
-							quantity: selectedQty,
-					  });
-			toast.success("Item added to cart!");
-			updateQuantity(selectedQty);
-			updateCart(data.cart.checkoutUrl);
+			const variantId = product?.variants?.edges[0].node?.id;
+			if (cartID) {
+				const { data } = await StoreService.updateCart({
+					cartId: cartID,
+					variantId,
+					quantity: selectedQty,
+					selling_plan: subscriptionPlanId,
+				});
+				toast.success("Cart updated successfully!");
+				updateQuantity(data?.cartLinesAdd?.cart?.lines?.edges?.length);
+				updateCart(
+					data?.cartLinesAdd?.cart?.id,
+					data?.cartLinesAdd?.cart?.checkoutUrl,
+				);
+			} else {
+				const { data } =
+					selectedOption === "subscribe"
+						? await StoreService.addSubscriptionPlan({
+								id: variantId,
+								quantity: selectedQty,
+								selling_plan: subscriptionPlanId,
+						  })
+						: await StoreService.addCart({
+								variantId,
+								quantity: selectedQty,
+						  });
+				toast.success("Item added to cart!");
+				updateQuantity(data?.cart?.lines?.edges?.length);
+				updateCart(data?.cart?.id, data?.cart?.checkoutUrl);
+			}
 		} catch (error) {
 		} finally {
 			setIsSubmitting(false);
