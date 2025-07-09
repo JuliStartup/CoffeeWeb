@@ -29,7 +29,10 @@ const getProducts = async (req, res) => {
 			const metafields = await callShopifyGraphQL(product.id);
 			product.metaFields = metafields;
 		}
-		res.status(200).json(products);
+		const featured = products?.filter(
+			(product) => product?.tags === "Featured",
+		);
+		res.status(200).json({ all: products, featured });
 	} catch (error) {
 		res.status(404).json({ error: error.message });
 	}

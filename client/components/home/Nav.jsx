@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { memo, useRef, useState } from "react";
 
+import { useCart } from "@/contexts/CartContext";
 import { Gift, ShoppingBag, SlashSquare, Star, User } from "lucide-react";
 import { GlobalDropdown } from "./Dropdowns";
 import MobileMenu from "./MobileMenu";
@@ -15,6 +16,7 @@ function Nav() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isPlatformDropdownOpen, setIsPlatformDropdownOpen] = useState(false);
 	const [isGlobalDropdownOpen, setIsGlobalDropdownOpen] = useState(false);
+	const { cart } = useCart();
 
 	const dropdownRef = useRef(null);
 	const globalDropdownRef = useRef(null);
@@ -29,7 +31,7 @@ function Nav() {
 			icon: <ShoppingBag />,
 			badge: (
 				<span className="absolute bg-[--highlight] rounded-full text-sm text-white text-center right-[24em] w-[20px] h-[20px] top-1">
-					0
+					{cart}
 				</span>
 			),
 		},
@@ -101,7 +103,7 @@ function Nav() {
 	return (
 		<div
 			ref={containerRef}
-			className="z-20 h-[70px] nav_wrapper relative flex flex-col items-center justify-between"
+			className="z-20 h-[70px] nav_wrapper flex flex-col items-center justify-between sticky top-0"
 		>
 			{/* Navigation */}
 			<nav className="nav w-full h-[82px] bg-transparent z-[900]">

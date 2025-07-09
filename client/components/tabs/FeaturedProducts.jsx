@@ -1,19 +1,28 @@
 "use client";
 
+import { useCart } from "@/contexts/CartContext";
 import { getNumericCode } from "@/services";
 import { MoveLeft, MoveRight } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function FeaturedProducts({ products, onSelect }) {
 	const scrollRef = useRef(null);
-	const [quantity, setQuantity] = useState(1);
-	const price = products?.variants?.edges[0].node?.price?.amount || 0;
-	const total = (quantity * parseFloat(price)).toFixed(2);
+	const [quantity, setQuantity] = useState(0);
+	const [totalAmount, setTotalAmount] = useState(0);
+	const price =
+		products[0]?.metaFields?.product?.variants?.edges[0].node?.price?.amount ||
+		0;
+	const { updateQuantity } = useCart();
 
-	const handleBuyNow = (variantId, sellingPlanId) => {
+	useEffect(() => {
+		setTotalAmount((quantity * parseFloat(price)).toFixed(2));
+		updateQuantity(quantity);
+	}, [quantity]);
+
+	const handleBuyNow = (variantId) => {
 		const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
 			variantId,
-		)}:${quantity}?selling_plan=${getNumericCode(sellingPlanId)}`;
+		)}:${quantity}`;
 		window.location.href = url;
 	};
 
@@ -50,9 +59,8 @@ export default function FeaturedProducts({ products, onSelect }) {
 								return flat.label;
 							},
 						) || [];
-					const sellingPlanId =
-						product?.variants?.edges[0].node?.sellingPlanAllocations?.edges[1]
-							.node?.sellingPlan.id;
+					const productId =
+						product?.metaFields?.product?.variants?.edges[0].node?.id;
 					return (
 						<div
 							key={product.id}
@@ -89,20 +97,22 @@ export default function FeaturedProducts({ products, onSelect }) {
 										)}
 									</div>
 								</div>
-								<div className="flex-1 flex flex-col gap-0 justify-between">
-									<div>
+								<div className="flex-1 flex flex-col justify-between">
+									<div className="flex flex-col gap-2">
 										<h2
-											className="text-3xl font-semibold pt-12 cursor-pointer"
+											className="text-3xl font-semibold cursor-pointer"
 											onClick={() => onSelect(product.id)}
 										>
 											{product?.title}
 										</h2>
-										{flavors?.map((tag) => (
-											<div className="inline mr-5" key={tag}>
-												<span>{tag}</span>
-											</div>
-										))}
-										<p className="font-bold mt-5">
+										<div className="d-inline">
+											{flavors?.map((tag) => (
+												<span className="inline mr-5" key={tag}>
+													{tag}
+												</span>
+											))}
+										</div>
+										<p className="font-bold ">
 											$
 											{
 												product?.metaFields?.product?.variants?.edges[0].node
@@ -111,12 +121,11 @@ export default function FeaturedProducts({ products, onSelect }) {
 										</p>
 									</div>
 									<div>{product?.metaFields?.product?.description}</div>
-
 									<div className="flex justify-between items-end gap-2 w-[fit-content]">
 										<div className="flex items-center gap-2">
 											<button
 												className="px-3 py-1 bg-gray-200 rounded text-lg font-bold"
-												onClick={() => setQuantity(Math.max(1, quantity - 1))}
+												onClick={() => setQuantity(Math.max(0, quantity - 1))}
 											>
 												−
 											</button>
@@ -142,15 +151,9 @@ export default function FeaturedProducts({ products, onSelect }) {
 									</div>
 									<button
 										className="bg-[--beige] text-[--card_TextColor] px-6 py-4 font-bold rounded-lg hover:bg-[--beige] w-full"
-										onClick={() =>
-											handleBuyNow(
-												product?.metaFields?.product?.variants?.edges[0].node
-													?.id,
-												sellingPlanId,
-											)
-										}
+										onClick={() => handleBuyNow(productId)}
 									>
-										ADD TO CART - ${total}
+										ADD TO CART - ${totalAmount}
 									</button>
 								</div>
 							</div>

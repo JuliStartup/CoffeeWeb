@@ -5,7 +5,7 @@ import StoreService from "@/services/StoreService";
 import { CircleCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-export default function ProductDetail({ productId, onBack }) {
+export default function ProductDetail({ product, flavors, onBack }) {
 	const quantityOptions = [
 		{
 			qty: 1,
@@ -18,41 +18,28 @@ export default function ProductDetail({ productId, onBack }) {
 	];
 
 	const frequencyOptions = useRef(null);
-
-	const [product, setProduct] = useState(null);
-	const [flavors, setFlavors] = useState(null);
 	const [selectedImage, setSelectedImage] = useState("");
 	const [selectedQty, setSelectedQty] = useState(1);
 	const [selectedOption, setSelectedOption] = useState("onetime");
-	const [frequency, setFrequency] = useState("");
+	const [subscriptionPlanId, setSubscriptionPlanId] = useState(null);
 
 	useEffect(() => {
-		const fetchProductInfo = async () => {
-			try {
-				const { data } = await StoreService.getProductInfo(productId);
-				setProduct(data.product);
-				frequencyOptions.current =
-					data.product?.variants?.edges[0].node?.sellingPlanAllocations?.edges;
-				setFrequency(
-					data.product?.variants?.edges[0].node?.sellingPlanAllocations
-						?.edges[0].node?.sellingPlan.id,
-				);
-				setSelectedImage(data.product?.images?.edges[0]?.node?.src);
-				setFlavors(data?.flavor);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		if (productId) {
-			fetchProductInfo();
+		if (product) {
+			frequencyOptions.current =
+				product?.variants?.edges[0].node?.sellingPlanAllocations?.edges;
+			setSubscriptionPlanId(
+				product?.variants?.edges[0].node?.sellingPlanAllocations?.edges[0].node
+					?.sellingPlan.id,
+			);
+			setSelectedImage(product?.images?.edges[0]?.node?.src);
 		}
-	}, [productId]);
+	}, [product]);
 
 	const handleSubscribeNow = async () => {
 		const body = {
 			id: product?.variants?.edges[0].node?.id,
 			quantity: selectedQty,
-			selling_plan: frequency,
+			selling_plan: subscriptionPlanId,
 		};
 		const { data } = await StoreService.addSubscriptionPlan(body);
 		window.location.href = data.cart.checkoutUrl;
@@ -199,8 +186,8 @@ export default function ProductDetail({ productId, onBack }) {
 											Select Autoship Frequency:
 										</label>
 										<select
-											value={frequency}
-											onChange={(e) => setFrequency(e.target.value)}
+											value={subscriptionPlanId}
+											onChange={(e) => setSubscriptionPlanId(e.target.value)}
 											className="w-full border border-gray-300 rounded-lg p-1  mb-1"
 										>
 											{frequencyOptions?.current.map(({ node }) => (

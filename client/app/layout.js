@@ -1,5 +1,6 @@
 // import Footer from "@/components/home/Footer";
 import Nav from "@/components/home/Nav";
+import { CartProvider } from "@/contexts/CartContext";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -24,9 +25,11 @@ export default function RootLayout({ children }) {
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<div className="w-full">
-					<Nav />
-					<main>{children}</main>
-					{/* <Footer /> */}
+					<CartProvider>
+						<Nav />
+						<main>{children}</main>
+						{/* <Footer /> */}
+					</CartProvider>
 				</div>
 			</body>
 		</html>
