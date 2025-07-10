@@ -72,7 +72,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 		<div className="relative w-full overflow-hidden py-6">
 			<button
 				onClick={() => scroll("left")}
-				className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
+				className="absolute left-0 top-[17%] md:top-1/2 md:left-2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
 			>
 				<MoveLeft />
 			</button>
@@ -97,14 +97,14 @@ export default function FeaturedProducts({ products, onSelect }) {
 					return (
 						<div
 							key={product.id}
-							className="w-full flex-shrink-0 snap-start px-4"
+							className="w-full flex-shrink-0 snap-start md:px-4"
 						>
 							<div className="flex flex-col lg:flex-row gap-8">
 								<div
 									onClick={() => onSelect(product.id)}
 									className="flex-1 cursor-pointer"
 								>
-									<span className="absolute bg-[--badge] left-28 top-1 p-2 w-24 shadow-md z-20 text-center">
+									<span className="absolute bg-[--badge] left-28 top-1 p-2 w-24 shadow-md md:z-20 text-center">
 										{product?.tags.toUpperCase()}
 									</span>
 									{product?.metaFields?.product?.images?.edges[0] && (
@@ -171,7 +171,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 											</button>
 										</div>
 										<p
-											className="font-bold text-xl"
+											className="font-bold text-md md:text-xl"
 											onClick={() => onSelect(product.id)}
 										>
 											1lb bag
@@ -186,7 +186,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 										disabled={quantity < 1}
 										className={`bg-[--beige] ${
 											quantity < 1 && "empty-cart"
-										} text-[--card_TextColor] px-6 py-4 font-bold rounded-lg w-full`}
+										} text-[--card_TextColor] px-6 py-4 font-bold rounded-lg w-full mt-2 md:mt-0`}
 										onClick={() => handleCart(productId)}
 									>
 										{isSubmitting ? "Added" : "ADD TO CART"}
@@ -200,7 +200,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 			</div>
 			<button
 				onClick={() => scroll("right")}
-				className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
+				className="absolute top-[17%] md:top-1/2 right-0 md:right-2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
 			>
 				<MoveRight />
 			</button>

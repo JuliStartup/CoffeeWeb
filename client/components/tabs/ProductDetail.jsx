@@ -104,8 +104,8 @@ export default function ProductDetail({ product, flavors, onBack }) {
 				</button>
 			</nav>
 
-			<div className="flex flex-col lg:flex-row gap-8">
-				<div className="flex flex-col gap-2 overflow-y-auto max-h-[400px]">
+			<div className="flex flex-col lg:flex-row gap-4 md:gap-8">
+				<div className="flex md:flex-col gap-2 overflow-y-auto max-h-[400px]">
 					{product?.images?.edges?.map((img, idx) => (
 						<img
 							key={idx}
@@ -132,7 +132,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 				{/* Product Details */}
 				<div className="flex-1 flex flex-col justify-between gap-4">
 					<div>
-						<h2 className="text-4xl font-semibold cursor-pointer">
+						<h2 className="text-3xl md:text-4xl font-semibold cursor-pointer">
 							{product?.title}
 						</h2>
 						{flavors?.map((tag) => (
@@ -142,7 +142,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 						))}
 					</div>
 					{/* Product Description */}
-					<div className="text-lg text-gray-800">{product?.description}</div>
+					<div className="md:text-lg text-gray-800">{product?.description}</div>
 					<div>
 						<div className="text-xl text-[--highlight] font-bold">
 							Select quantity

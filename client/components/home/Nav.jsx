@@ -30,7 +30,7 @@ function Nav() {
 			name: "Cart",
 			icon: <ShoppingBag />,
 			badge: (
-				<span className="absolute bg-[--highlight] rounded-full text-sm text-white text-center right-[24em] w-[20px] h-[20px] top-1">
+				<span className="absolute bg-[--highlight] rounded-full text-sm text-white text-center left-[6em] md:left-auto md:right-[24em] w-[20px] h-[20px] md:top-1">
 					{cart}
 				</span>
 			),

@@ -15,14 +15,16 @@ const MobileMenu = ({ isMenuOpen, toggleMenu, menus }) => {
 				>
 					<X className="h-6 w-6" />
 				</button>
-				{menus.map(({ name, icon }) => (
+				{menus.map(({ name, icon, badge, color, url }) => (
 					<a
 						key={name}
 						className="flex items-center gap-2 font-twk p-0 font-thin rounded-md transition-colors duration-300 text-neutral-600 hover:bg-gray-200"
-						href="/"
+						href={url || "/"}
 						onClick={toggleMenu}
 					>
-						{icon}
+						{badge}
+						<div className={color}>{icon}</div>
+
 						{name}
 					</a>
 				))}
