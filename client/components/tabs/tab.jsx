@@ -21,19 +21,19 @@ export default function TabCards() {
 
 	return (
 		<div>
-			<div className="overflow-hidden bg-[--beige] p-2 w-full flex flex-nowrap justify-center gap-4">
+			<div className="overflow-hidden bg-[--beige] py-6 w-full flex flex-wrap lg:flex-nowrap justify-center gap-4 px-4">
 				{cardItems.map((item, index) => (
 					<div
 						key={index}
 						onClick={() => handleCardClick(item.text)}
-						className={`cursor-pointer bg-[--tab_card_bg] bg-opacity-10 py-2 lg:p-0 rounded-xl shadow-md text-center flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105 flex-grow basis-40 max-w-xs lg:h-16 ${
+						className={`cursor-pointer bg-[--cover_bag] bg-opacity-10 p-4 rounded-xl shadow-md text-center flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105 flex-grow basis-40 max-w-xs xl:w-48 lg:h-32 ${
 							activeCard === item.text ? "ring-2 ring-white" : ""
 						}`}
 					>
 						<span
-							className="text-[--card-text-color] font-semibold text-[0.85rem] lg:text-lg "
+							className="text-[--card-text-color] font-semibold lg:text-lg "
 							style={{
-								color: "var(--card_TextColor)",
+								color: "var(--cover_bag_1)",
 								textTransform: "uppercase",
 							}}
 						>
