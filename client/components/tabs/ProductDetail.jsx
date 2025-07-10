@@ -18,6 +18,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 		{ qty: 6, price: 15.19, saved: 20, label: "Per Pack" },
 	];
 
+	const [selectedFlavor, setSelectedFlavor] = useState(flavors[0]);
 	const frequencyOptions = useRef(null);
 	const [selectedImage, setSelectedImage] = useState("");
 	const [selectedQty, setSelectedQty] = useState(1);
@@ -135,18 +136,41 @@ export default function ProductDetail({ product, flavors, onBack }) {
 						<h2 className="text-3xl md:text-4xl font-semibold cursor-pointer">
 							{product?.title}
 						</h2>
-						{flavors?.map((tag) => (
+						{/* {flavors?.map((tag) => (
 							<div className="inline mr-5 text-md text-gray-800" key={tag}>
 								<span>{tag}</span>
 							</div>
-						))}
+						))} */}
 					</div>
-					{/* Product Description */}
-					<div className="md:text-lg text-gray-800">{product?.description}</div>
+
+					<div className="text-gray-800">{product?.description}</div>
+					{flavors && (
+						<div>
+							<div className="text-lg text-[--highlight] font-bold">
+								Choose a flavor
+							</div>
+							<div className="flex w-full max-w-lg gap-4 pt-2 ">
+								{flavors?.map((flavor) => (
+									<button
+										key={flavor}
+										onClick={() => setSelectedFlavor(flavor)}
+										className={`px-3 py-1 rounded-full border text-sm ${
+											selectedFlavor === flavor
+												? "bg-[--selected] text-white"
+												: "bg-gray-100 text-gray-800"
+										}`}
+									>
+										{flavor}
+									</button>
+								))}
+							</div>
+						</div>
+					)}
 					<div>
-						<div className="text-xl text-[--highlight] font-bold">
+						<div className="text-lg text-[--highlight] font-bold">
 							Select quantity
 						</div>
+
 						<div className="grid items-start w-full max-w-lg gap-4 pt-2 grid-cols-3">
 							{quantityOptions.map((opt) => {
 								const isSelected = selectedQty === opt.qty;
@@ -159,7 +183,6 @@ export default function ProductDetail({ product, flavors, onBack }) {
 											isSelected ? "border-[--selected]" : "border-gray-300"
 										}`}
 									>
-										{/* Green Check Icon */}
 										{isSelected && (
 											<span className="absolute top-0 inset-x-0 mx-auto -mt-2.5 text-white left-[4.3em]">
 												<CircleCheck
@@ -169,7 +192,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 											</span>
 										)}
 										<div className="text-md mt-3">{opt.qty} </div>
-										<div className="text-xl font-bold">
+										<div className="text-lg font-bold">
 											${opt.price.toFixed(2)}
 										</div>
 										<div className="text-lg block mb-3">{opt.label} </div>
@@ -184,14 +207,14 @@ export default function ProductDetail({ product, flavors, onBack }) {
 						</div>
 					</div>
 					<div className="flex flex-col gap-2 w-full">
-						<div className="text-xl text-[--highlight] font-bold">
+						<div className="text-lg text-[--highlight] font-bold">
 							Select frequency
 						</div>
 						<div className="flex flex-col gap-2 w-full">
 							<label
-								className={`flex flex-col gap-3 cursor-pointer border rounded-lg p-4 w-full ${
+								className={`flex flex-col gap-3 cursor-pointer border rounded-lg p-2 w-full ${
 									selectedOption === "subscribe"
-										? "border-green-500 ring-2 ring-green-300"
+										? "border-[--selected] ring-2 ring-[--selected]"
 										: "border-gray-300"
 								}`}
 							>
@@ -209,7 +232,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 									<div
 										className={`h-5 w-5 rounded-full border-2 flex items-center justify-center  ${
 											selectedOption === "subscribe"
-												? "border-green-600 bg-green-600"
+												? "border-[--selected] bg-[--selected]"
 												: "border-gray-400"
 										} `}
 									>
@@ -245,9 +268,9 @@ export default function ProductDetail({ product, flavors, onBack }) {
 							</label>
 
 							<label
-								className={`flex flex-col gap-3 cursor-pointer border rounded-lg p-4 w-full ${
+								className={`flex flex-col gap-3 cursor-pointer border rounded-lg p-2 w-full ${
 									selectedOption === "onetime"
-										? "border-green-500 ring-2 ring-green-300"
+										? "border-[--selected] ring-2 ring-[--selected]"
 										: "border-gray-300"
 								}`}
 							>
@@ -263,7 +286,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 									<div
 										className={`h-5 w-5 rounded-full border-2 flex items-center justify-center  ${
 											selectedOption === "onetime"
-												? "border-green-600 bg-green-600"
+												? "border-[--selected] bg-[--selected]"
 												: "border-gray-400"
 										} `}
 									>

@@ -11,6 +11,7 @@ export default function FeaturedProducts({ products, onSelect }) {
 	const scrollRef = useRef(null);
 	const [quantity, setQuantity] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(0);
+	const [selectedFlavor, setSelectedFlavor] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const price =
 		products[0]?.metaFields?.product?.variants?.edges[0].node?.price?.amount ||
@@ -138,13 +139,35 @@ export default function FeaturedProducts({ products, onSelect }) {
 										>
 											{product?.title}
 										</h2>
-										<div className="d-inline">
+										{/* <div className="d-inline">
 											{flavors?.map((tag) => (
 												<span className="inline mr-5" key={tag}>
 													{tag}
 												</span>
 											))}
-										</div>
+										</div> */}
+										{flavors && (
+											<div>
+												{/* <div className="text-lg text-[--highlight] font-bold">
+													Choose a flavor
+												</div> */}
+												<div className="flex w-full max-w-lg gap-4">
+													{flavors?.map((flavor) => (
+														<button
+															key={flavor}
+															onClick={() => setSelectedFlavor(flavor)}
+															className={`px-3 py-1 rounded-full border text-sm  ${
+																selectedFlavor === flavor
+																	? "bg-[--selected] text-white"
+																	: "bg-gray-100 text-gray-800"
+															}`}
+														>
+															{flavor}
+														</button>
+													))}
+												</div>
+											</div>
+										)}
 										<p className="font-bold ">
 											$
 											{
