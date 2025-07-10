@@ -46,7 +46,7 @@ export default function Shop() {
 
 	return (
 		<div
-			className={`mt-0 px-5 pt-6 mx-auto max-w-screen-2xl md:px-7 lg:px-14 xl:px-20 2xl:px-12 md:pt-9 xl:pt-6 transition`}
+			className={`mt-0 px-3 pt-6 mx-auto max-w-screen-2xl md:px-7 lg:px-14 xl:px-20 2xl:px-12 md:pt-9 xl:pt-6 transition`}
 		>
 			{selectedId && product ? (
 				<ProductDetail
@@ -63,7 +63,9 @@ export default function Shop() {
 						/>
 					)}
 					<Subscription />
-					<ProductList onSelect={setSelectedId} products={products} />
+					<div className="px-3">
+						<ProductList onSelect={setSelectedId} products={products} />
+					</div>
 				</div>
 			) : (
 				<div className="flex justify-center items-center mt-[10%]">

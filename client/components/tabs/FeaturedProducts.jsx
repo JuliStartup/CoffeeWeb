@@ -1,7 +1,6 @@
 "use client";
 
 import { useCart } from "@/contexts/CartContext";
-import { getNumericCode } from "@/services";
 import StoreService from "@/services/StoreService";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -22,12 +21,12 @@ export default function FeaturedProducts({ products, onSelect }) {
 		setTotalAmount((quantity * parseFloat(price)).toFixed(2));
 	}, [quantity]);
 
-	const handleBuyNow = (variantId) => {
-		const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
-			variantId,
-		)}:${quantity}`;
-		window.location.href = url;
-	};
+	// const handleBuyNow = (variantId) => {
+	// 	const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
+	// 		variantId,
+	// 	)}:${quantity}`;
+	// 	window.location.href = url;
+	// };
 
 	const handleCart = async (variantId) => {
 		setIsSubmitting(true);
@@ -73,9 +72,9 @@ export default function FeaturedProducts({ products, onSelect }) {
 		<div className="relative w-full overflow-hidden py-6">
 			<button
 				onClick={() => scroll("left")}
-				className="absolute left-0 top-[17%] md:top-1/2 md:left-2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
+				className="absolute top-[20%] md:top-1/2 md:left-2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
 			>
-				<MoveLeft />
+				<MoveLeft className="w-3 h-3 md:w-6 md:h-6" />
 			</button>
 			<div
 				ref={scrollRef}
@@ -223,9 +222,9 @@ export default function FeaturedProducts({ products, onSelect }) {
 			</div>
 			<button
 				onClick={() => scroll("right")}
-				className="absolute top-[17%] md:top-1/2 right-0 md:right-2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
+				className="absolute top-[20%] md:top-1/2 right-0 md:right-2 z-10 -translate-y-1/2 rounded-full bg-[--badge] text-white p-3 shadow"
 			>
-				<MoveRight />
+				<MoveRight className="w-3 h-3 md:w-6 md:h-6" />
 			</button>
 		</div>
 	);

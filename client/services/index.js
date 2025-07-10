@@ -7,12 +7,6 @@ export const API = axios.create({
 	baseURL: BASE_URL,
 });
 
-export const getNumericCode = (variantId) => {
-	const parts = variantId.split("/");
-	const numericId = parts[parts.length - 1];
-	return numericId;
-};
-
 const withAuthHeader = {
 	headers: {
 		"Content-Type": "application/json",

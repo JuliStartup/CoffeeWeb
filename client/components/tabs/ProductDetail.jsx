@@ -87,13 +87,6 @@ export default function ProductDetail({ product, flavors, onBack }) {
 		}
 	};
 
-	// const handleBuyNow = () => {
-	// 	const url = `https://wyndclub.myshopify.com/cart/${getNumericCode(
-	// 		product?.variants?.edges[0].node?.id,
-	// 	)}:${selectedQty}`;
-	// 	window.location.href = url;
-	// };
-
 	return (
 		<div className="py-4 max-w-7xl mx-auto">
 			<nav className="text-sm text-[--card_TextColor] mb-4">

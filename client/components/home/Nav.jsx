@@ -22,8 +22,18 @@ function Nav() {
 	const globalDropdownRef = useRef(null);
 	const containerRef = useRef(null);
 	const NAV_LINKS = [
-		{ name: "Franchise", icon: <Star />, color: "text-[--highlight]" },
-		{ name: "Wholesale", icon: <SlashSquare />, color: "text-[--highlight]" },
+		{
+			name: "Franchise",
+			icon: <Star />,
+			color: "text-[--highlight]",
+			url: "/franchise",
+		},
+		{
+			name: "Wholesale",
+			icon: <SlashSquare />,
+			color: "text-[--highlight]",
+			url: "/wholesale",
+		},
 		{ name: "Join Club", icon: <Gift />, color: "text-[--highlight]" },
 		{ name: "Account", icon: <User /> },
 		{
@@ -105,7 +115,7 @@ function Nav() {
 	return (
 		<div
 			ref={containerRef}
-			className="z-20 h-[70px] nav_wrapper flex flex-col items-center justify-between sticky top-0"
+			className="z-20 h-[70px] nav_wrapper flex flex-col items-center justify-between sticky top-0 md:h-[80px]"
 		>
 			{/* Navigation */}
 			<nav className="nav w-full h-[82px] bg-transparent z-[900]">
