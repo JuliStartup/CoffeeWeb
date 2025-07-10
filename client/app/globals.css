@@ -165,3 +165,6 @@ body {
 .empty-cart {
 	background-color: var(--emptyCart);
 }
+.mandatory {
+	color: red;
+}
