@@ -164,7 +164,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 							Select quantity
 						</div>
 
-						<div className="grid items-start w-full max-w-lg gap-4 pt-2 grid-cols-3">
+						<div className="grid items-start max-w-lg gap-4 pt-2 grid-cols-3">
 							{quantityOptions.map((opt) => {
 								const isSelected = selectedQty === opt.qty;
 
@@ -190,7 +190,7 @@ export default function ProductDetail({ product, flavors, onBack }) {
 										</div>
 										<div className="text-lg block mb-3">{opt.label} </div>
 										{opt.saved && (
-											<div className="py-1 bg-[red] rounded-lg font-semibold text-white">
+											<div className="py-1 bg-[red] rounded font-semibold text-white">
 												Save {opt.saved}%
 											</div>
 										)}

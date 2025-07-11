@@ -17,7 +17,7 @@ const storeBaseUrl = `https://${shop}/api/${apiVersion}/graphql.json`;
 const getProducts = async (req, res) => {
 	try {
 		const response = await fetch(
-			`${adminBaseUrl}/products.json?status=active&fields=id,title,tags`,
+			`${adminBaseUrl}/products.json?status=active&fields=id,title,tags,variants`,
 			{
 				headers: {
 					"X-Shopify-Access-Token": adminToken,
@@ -35,6 +35,9 @@ const getProducts = async (req, res) => {
 		for (const product of products) {
 			const metafields = await callShopifyGraphQL(product.id);
 			product.metaFields = metafields;
+			product.isInStock = product.variants.some(
+				(v) => v.inventory_quantity > 0,
+			);
 		}
 		const featured = products?.filter(
 			(product) => product?.tags === "Featured",

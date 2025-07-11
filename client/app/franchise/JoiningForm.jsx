@@ -11,7 +11,7 @@ export default function JoiningForm() {
 				<div className="hidden md:flex w-full md:w-1/2 flex items-center justify-center">
 					<div className="text-5xl w-1/2 text-white font-semibold">
 						Beautiful ingredients make beautiful things. This includes cafe
-						partners like your
+						partners like you.
 					</div>
 				</div>
 				<div className="w-full md:w-1/2 min-h-[700px] flex items-center justify-evenly bg-black/30 backdrop-blur">

@@ -21,20 +21,33 @@ export default function ProductList({ onSelect, products }) {
 							return flat.label;
 						},
 					) || [];
+				const badgeTitle = product?.isInStock
+					? product?.tags?.toUpperCase() || "SALE"
+					: "OUT OF STOCK";
+				const badgeColor =
+					badgeTitle === "SALE"
+						? "[--featured]"
+						: badgeTitle === "OUT OF STOCK"
+						? "[--beige]"
+						: "[--badge]";
+				const badgeTextColor = badgeTitle === "SALE" ? "white" : "black";
 				return (
 					<div
 						key={product.id}
-						className="flex flex-col w-full bg-gray-200 border border-gray-200 rounded-lg shadow "
+						className="flex flex-col w-full bg-gray-200 border border-gray-200 rounded-lg shadow"
 					>
 						<div
 							className="relative block h-full cursor-pointer"
-							onClick={() => onSelect(product.id)}
+							onClick={() =>
+								badgeTitle !== "OUT OF STOCK" && onSelect(product.id)
+							}
 						>
-							{product?.tags && (
-								<span className="absolute bg-[--badge] flex items-center justify-center right-3 px-6 py-1 rounded shadow-md text-white text-center -top-4 ">
-									{product?.tags.toUpperCase()}
-								</span>
-							)}
+							<span
+								className={`absolute bg-${badgeColor} flex items-center justify-center text-${badgeTextColor} right-3 px-6 py-1 rounded shadow-md text-center -top-4`}
+							>
+								{badgeTitle}
+							</span>
+
 							<img
 								src={product.metaFields.product.images?.edges[0]?.node.src}
 								alt={
@@ -73,7 +86,9 @@ export default function ProductList({ onSelect, products }) {
 								</div>
 								<div
 									className="flex items-center justify-center us-max:flex-col 2xl:flex-row lg:flex-col"
-									onClick={() => onSelect(product.id)}
+									onClick={() =>
+										badgeTitle !== "OUT OF STOCK" && onSelect(product.id)
+									}
 								>
 									<div className="py-2 mb-4 btn-buy text-white md:mb-0 text-lg sm-only:px-1.5 cursor-pointer">
 										Buy Now
